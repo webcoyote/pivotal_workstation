@@ -2,6 +2,7 @@ include_recipe "pivotal_workstation::homebrew"
 include_recipe "pivotal_workstation::ack"
 include_recipe "pivotal_workstation::git"
 include_recipe "pivotal_workstation::rvm"
+brew_install "tmux"
 
 execute "brew install macvim with system ruby" do
   user WS_USER
@@ -37,6 +38,11 @@ end
   end
 end
 
+link "#{WS_HOME}/.tmux.conf" do
+  to "#{node["vim_home"]}/bundle/tmux-config/tmux.conf"
+  owner WS_USER
+end
+
 brew_install "ctags"
 
 execute "compile command-t" do
@@ -53,3 +59,4 @@ ruby_block "test to see if MacVim link worked" do
 end
 
 pivotal_workstation_bash_profile_include "vi_is_minimal_vim"
+pivotal_workstation_bash_profile_include "vim_tmux"
