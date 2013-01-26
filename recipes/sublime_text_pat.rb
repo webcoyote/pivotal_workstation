@@ -13,8 +13,12 @@ class Chef::Recipe
       end
     end
 
+    def self.basename (node)
+      "Sublime Text #{node['sublime_text'][:version]}"
+    end
+
     def self.filename (node)
-      "Sublime Text #{node['sublime_text'][:version]}#{self.extension(node)}"
+      "#{self.basename(node)}#{self.extension(node)}"
     end
 
     def self.srcdir (node)
@@ -79,8 +83,8 @@ if node["platform"] != "mac_os_x"
 
 else
 
-  dmg_package "Sublime Text 2 (Mac)" do
-    dmg_name URL.escape(Sublime::filename(node))
+  dmg_package "Sublime Text 2" do
+    dmg_name URI.escape(Sublime::basename(node))
     source Sublime::download_url(node)
     checksum "b5f91ee4f62d36c0490c021d5fb134b9e7cb3936"
     owner WS_USER
