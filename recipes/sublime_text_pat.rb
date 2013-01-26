@@ -41,7 +41,7 @@ class Chef::Recipe
       end
     end
 
-    def self.srcdir_owner (node)
+    def self.owner (node)
       if node["platform"] != "mac_os_x"
         'root'
       else
@@ -58,7 +58,7 @@ end
 
 # Create directory where Sublime is installed
 directory Sublime::srcdir(node) do
-  owner Sublime::srcdir_owner(node)
+  owner Sublime::owner(node)
 end
 
 # Unpack and install
@@ -93,3 +93,9 @@ link "/usr/local/bin/subl" do
   to Sublime::dstfile(node)
 end
 
+template "/usr/local/bin/e" do
+  mode '0755'
+  source "sublime_text.sh"
+  owner Sublime::owner(node)
+  action :create_if_missing
+end
