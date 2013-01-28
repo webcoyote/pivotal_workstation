@@ -12,9 +12,9 @@ link "/usr/local/bin/diffmerge" do
   to "/Applications/DiffMerge.app/Contents/Resources/diffmerge.sh"
 end
 
-# Configure git if requested
+# Configure git unless otherwise requested
 node["diffmerge"] ||= {}
-node["diffmerge"]["configure-git"] ||= 0
+node["diffmerge"]["configure-git"] ||= 1
 if node["diffmerge"]["configure-git"] != 0
 
   [
