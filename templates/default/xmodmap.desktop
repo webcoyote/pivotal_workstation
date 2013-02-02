@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/xmodmap -e "clear mod3" -e "add mod3 = Insert"
+Hidden=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=xmodmap keyboard configuration for xmonad
+Name=xmodmap keyboard configuration for xmonad
+Comment[en_US]=
+Comment=
