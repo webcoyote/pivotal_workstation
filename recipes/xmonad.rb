@@ -48,3 +48,19 @@ template "/home/#{WS_USER}/.config/autostart/xmodmap.desktop" do
   mode '0644'
   action :create_if_missing
 end
+
+template "/etc/init.d/xmonadkey" do
+  source "xmonadkey.sh"
+  owner 'root'
+  group 'root'
+  mode '0755'
+  action :create_if_missing
+end
+
+link "/etc/rc5.d/S90xmonadkey" do
+  to "/etc/init.d/xmonadkey"
+  link_type :symbolic
+  owner 'root'
+  group 'root'
+end
+
