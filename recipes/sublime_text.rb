@@ -45,11 +45,7 @@ class Chef::Recipe
     end
 
     def self.owner (node)
-      if node["platform"] != "mac_os_x"
-        'root'
-      else
-        WS_USER
-      end
+      WS_USER
     end
 
     def self.download_url (node)
