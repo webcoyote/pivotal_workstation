@@ -1,5 +1,8 @@
 include_recipe "pivotal_workstation::git"
-include_recipe "pivotal_workstation::apple_gcc42"
+
+if node["platform"] == "mac_os_x"
+  include_recipe "pivotal_workstation::apple_gcc42"
+end
 
 rvm_git_revision_hash  = version_string_for("rvm")
 
