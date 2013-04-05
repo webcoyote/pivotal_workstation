@@ -57,10 +57,13 @@ template "/etc/init.d/xmonadkey" do
   action :create_if_missing
 end
 
-link "/etc/rc5.d/S90xmonadkey" do
-  to "/etc/init.d/xmonadkey"
-  link_type :symbolic
-  owner 'root'
-  group 'root'
+# RedHat uses runlevel 5 for graphics mode. Debian usually
+# uses 2 but can use anything from 2..5 so set them all
+(2..5).each do |runlevel|
+  link "/etc/rc#{runlevel}.d/S90xmonadkey" do
+    to "/etc/init.d/xmonadkey"
+    link_type :symbolic
+    owner 'root'
+    group 'root'
+  end
 end
-
