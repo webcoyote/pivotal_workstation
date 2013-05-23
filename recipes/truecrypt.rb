@@ -1,17 +1,16 @@
+version = "7.1a"
+
 if node["platform"] == "mac_os_x"
 
   dmg_package "TrueCrypt" do
     source "http://www.truecrypt.org/download/TrueCrypt%20#{version}%20Mac%20OS%20X.dmg"
     checksum "04db58b737c05bb6b0b83f1cb37a29edec844b59ff223b9e213ee1f4e287f586"
     action :install
-    type "pkg"
     owner WS_USER
-    package_id "org.truecrypt.truecrypt"
   end
 
 else
 
-  version = "7.1a"
   files = {
     "console-x64" => {
       :checksum => "3f48210cca1c17f433572845586d5e2a1a717a545480d136cb970689a44e3c32",
