@@ -28,3 +28,15 @@ else
   end
 
 end
+
+#
+#node_attributes:
+#  vagrant_plugins:
+#    - vagrant-aws
+#    - vagrant-berkshelf
+
+(node['vagrant_plugins'] || []).each do |name|
+  execute "vagrant plugin install #{name}" do
+    user WS_USER
+  end
+end
