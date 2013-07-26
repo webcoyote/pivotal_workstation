@@ -16,6 +16,14 @@ class Chef::Recipe
       "Sublime Text #{node['sublime_text'][:version]}"
     end
 
+    def self.checksum (node)
+      if node["platform"] != "mac_os_x"
+        node['sublime_text'][:checksum][:linux]
+      else
+        node['sublime_text'][:checksum][:osx]
+      end
+    end
+
     def self.filename (node)
       "#{self.basename(node)}#{self.extension(node)}"
     end
@@ -44,10 +52,6 @@ class Chef::Recipe
       end
     end
 
-    def self.owner (node)
-      WS_USER
-    end
-
     def self.download_url (node)
       URI.escape "#{node['sublime_text'][:download_url]}/#{self.filename(node)}"
     end
@@ -56,9 +60,7 @@ class Chef::Recipe
 end
 
 # Create directory where Sublime is installed
-directory Sublime::dstdir(node) do
-  owner Sublime::owner(node)
-end
+directory Sublime::dstdir(node)
 
 # Unpack and install
 if node["platform"] != "mac_os_x"
@@ -66,7 +68,7 @@ if node["platform"] != "mac_os_x"
   srcfile = "#{Chef::Config[:file_cache_path]}/#{Sublime::filename(node)}"
   remote_file srcfile do
     source Sublime::download_url(node)
-    checksum "858df93325334b7c7ed75daac26c45107e0c7cd194d522b42a6ac69fae6de404"
+    checksum Sublime::checksum(node)
   end
 
   execute "Unpack Sublime Text" do
@@ -79,8 +81,7 @@ else
   dmg_package "Sublime Text 2" do
     dmg_name URI.escape(Sublime::basename(node))
     source Sublime::download_url(node)
-    checksum "b5f91ee4f62d36c0490c021d5fb134b9e7cb3936"
-    owner Sublime::owner(node)
+    checksum Sublime::checksum(node)
   end
 
 end
@@ -95,7 +96,6 @@ end
 template "/usr/local/bin/e" do
   mode '0755'
   source "sublime_text.sh"
-  owner Sublime::owner(node)
   action :create_if_missing
 end
 
