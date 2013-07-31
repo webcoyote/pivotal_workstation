@@ -4,22 +4,6 @@ require 'uri'
 class Chef::Recipe
   class Sublime
 
-    def self.extension (node)
-      if node["platform"] != "mac_os_x"
-        " x64.tar.bz2"
-      else
-        ".dmg"
-      end
-    end
-
-    def self.basename (node)
-      "Sublime Text #{node['sublime_text'][:version]}"
-    end
-
-    def self.filename (node)
-      "#{self.basename(node)}#{self.extension(node)}"
-    end
-
     def self.config_dir_array (node)
       if node["platform"] != "mac_os_x"
         ["#{WS_HOME}", ".config", "sublime-text-2"]
@@ -44,29 +28,21 @@ class Chef::Recipe
       end
     end
 
-    def self.owner (node)
-      WS_USER
-    end
-
-    def self.download_url (node)
-      URI.escape "#{node['sublime_text'][:download_url]}/#{self.filename(node)}"
-    end
-
   end
 end
 
 # Create directory where Sublime is installed
 directory Sublime::dstdir(node) do
-  owner Sublime::owner(node)
+  owner WS_USER
 end
 
 # Unpack and install
 if node["platform"] != "mac_os_x"
 
-  srcfile = "#{Chef::Config[:file_cache_path]}/#{Sublime::filename(node)}"
+  srcfile = "#{Chef::Config[:file_cache_path]}/Sublime.pkg"
   remote_file srcfile do
-    source Sublime::download_url(node)
-    checksum "858df93325334b7c7ed75daac26c45107e0c7cd194d522b42a6ac69fae6de404"
+    source node['sublime_text'][node['platform_family']]['url']
+    checksum node['sublime_text'][node['platform_family']]['checksum']
   end
 
   execute "Unpack Sublime Text" do
@@ -77,10 +53,10 @@ if node["platform"] != "mac_os_x"
 else
 
   dmg_package "Sublime Text 2" do
-    dmg_name URI.escape(Sublime::basename(node))
-    source Sublime::download_url(node)
-    checksum "b5f91ee4f62d36c0490c021d5fb134b9e7cb3936"
-    owner Sublime::owner(node)
+    source node['sublime_text']['osx']['url']
+    checksum node['sublime_text']['osx']['checksum']
+    action :install
+    owner WS_USER
   end
 
 end
@@ -95,7 +71,7 @@ end
 template "/usr/local/bin/e" do
   mode '0755'
   source "sublime_text.sh"
-  owner Sublime::owner(node)
+  owner WS_USER
   action :create_if_missing
 end
 

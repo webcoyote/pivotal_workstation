@@ -5,8 +5,8 @@
 if node["platform"] == "mac_os_x"
 
   dmg_package "Vagrant" do
-    source "http://files.vagrantup.com/packages/7e400d00a3c5a0fdf2809c8b5001a035415a607b/Vagrant-1.2.2.dmg"
-    checksum "1581552841e076043308f330a5b1130b455c604846116c54b5330bb17240c7ee"
+    source node['vagrant']['osx']['url']
+    checksum ['vagrant']['osx']['checksum']
     action :install
     type "pkg"
     owner WS_USER
@@ -15,10 +15,10 @@ if node["platform"] == "mac_os_x"
 
 else
 
-  srcfile = "#{Chef::Config[:file_cache_path]}/vagrant_1.2.2_x86_64.deb"
+  srcfile = "#{Chef::Config[:file_cache_path]}/vagrant.deb"
   remote_file srcfile do
-    source "http://files.vagrantup.com/packages/7e400d00a3c5a0fdf2809c8b5001a035415a607b/vagrant_1.2.2_x86_64.deb"
-    checksum "d3035d259a28bd7090ef00629e61cc0520778143fad06f49adb3c45a75fb1425"
+    source node['vagrant'][node["platform_family"]]['url']
+    checksum node['vagrant'][node["platform_family"]]['checksum']
     mode 0644
   end
 
