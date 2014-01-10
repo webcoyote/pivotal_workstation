@@ -1,9 +1,9 @@
 default['vagrant']['osx'] = {
-  'url' => 'http://files.vagrantup.com/packages/7ec0ee1d00a916f80b109a298bab08e391945243/Vagrant-1.2.7.dmg',
-  'checksum' => '75c720eda0cbe6b2a2b19e38757ba4c34fbc57095ab4cc1459609bd242418129'
+  'url' => 'https://dl.bintray.com/mitchellh/vagrant/Vagrant-1.4.2.dmg',
+  'checksum' => 'a8881bdffc1d25478111a35426d6974f6c4edc2c48c1da319d36880e3cea5653',
 }
 
 default['vagrant']['debian'] = {
-  'url' => 'https://dl.bintray.com/mitchellh/vagrant/vagrant_1.4.1_x86_64.deb',
-  'checksum' => '27748094f15ff708cd0d130e4a2e30e4722aecc562901a3f204e6e36dbe1013e'
+  'url' => 'https://dl.bintray.com/mitchellh/vagrant/vagrant_1.4.2_x86_64.deb',
+  'checksum' => '07b1b7a5c9e43430d409e5411a8bbede1e15a87723d9ad682159a9b1d20b3319',
 }
