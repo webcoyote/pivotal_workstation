@@ -4,19 +4,23 @@ require 'uri'
 class Chef::Recipe
   class Sublime
 
+    def self.version (node)
+      node['sublime_text']['version'].to_s
+    end
+
     def self.config_dir_array (node)
       if node["platform"] != "mac_os_x"
-        ["#{WS_HOME}", ".config", "sublime-text-2"]
+        ["#{WS_HOME}", ".config", "sublime-text-#{Sublime::version(node)}"]
       else
-        ["#{WS_HOME}/Library/Application Support", "Sublime Text 2"]
+        ["#{WS_HOME}/Library/Application Support", "Sublime Text #{Sublime::version(node)}"]
       end
     end
 
     def self.dstdir (node)
       if node["platform"] != "mac_os_x"
-        "/opt/subl"
+        "/opt/subl#{Sublime::version(node)}"
       else
-        "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin"
+        "/Applications/Sublime Text #{Sublime::version(node)}.app/Contents/SharedSupport/bin"
       end
     end
 
@@ -39,10 +43,10 @@ end
 # Unpack and install
 if node["platform"] != "mac_os_x"
 
-  srcfile = "#{Chef::Config[:file_cache_path]}/Sublime.pkg"
+  srcfile = "#{Chef::Config[:file_cache_path]}/Sublime-#{Sublime::version(node)}.pkg"
   remote_file srcfile do
-    source node['sublime_text'][node['platform_family']]['url']
-    checksum node['sublime_text'][node['platform_family']]['checksum']
+    source node['sublime_text'][Sublime::version(node)][node['platform_family']]['url']
+    checksum node['sublime_text'][Sublime::version(node)][node['platform_family']]['checksum']
   end
 
   execute "Unpack Sublime Text" do
@@ -52,29 +56,30 @@ if node["platform"] != "mac_os_x"
 
 else
 
-  dmg_package "Sublime Text 2" do
-    source node['sublime_text']['osx']['url']
-    checksum node['sublime_text']['osx']['checksum']
+  dmg_package "Sublime Text #{Sublime::version(node)}" do
+    source node['sublime_text'][Sublime::version(node)]['osx']['url']
+    checksum node['sublime_text'][Sublime::version(node)]['osx']['checksum']
     action :install
     owner WS_USER
   end
 
 end
 
+[ "", Sublime::version(node) ].each do |v|
 
-link "/usr/local/bin/subl" do
-  to Sublime::dstfile(node)
+  # Create subl, subl2 (for Sublime 2)
+  link "/usr/local/bin/subl#{v}" do
+    to Sublime::dstfile(node)
+  end
+
+  # Create e, e2 (for Sublime 2)
+  template "/usr/local/bin/e#{v}" do
+    mode '0755'
+    source "sublime_text.sh.erb"
+    owner WS_USER
+  end
+
 end
-
-
-# Create shortcut
-template "/usr/local/bin/e" do
-  mode '0755'
-  source "sublime_text.sh"
-  owner WS_USER
-  action :create_if_missing
-end
-
 
 # Install packages list in attributes
 packages_dir_array = Sublime::config_dir_array(node) << "Packages"
