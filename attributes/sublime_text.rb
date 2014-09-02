@@ -13,12 +13,12 @@ default['sublime_text']['2']['debian'] = {
 
 # Sublime Text 3
 default['sublime_text']['3']['osx'] = {
-  'url' => 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%20Build%203059.dmg',
-  'checksum' => '057c12afed359ea93f996b2e73973fa8ea2bfb14a3e61a5e13b467c5c38d4ca5'
+  'url' => 'http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%20Build%203065.dmg',
+  'checksum' => '373dbfcddab7fb288351763402361cd4045f4a9510eb32f81938d0c156d161c3'
 }
 default['sublime_text']['3']['debian'] = {
-  'url' => 'http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3059_x64.tar.bz2',
-  'checksum' => 'da3039687664d33a734cea0151b2291ece9c7f35e5b73df5b2b5eac28a20b972'
+  'url' => 'http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3065_x64.tar.bz2',
+  'checksum' => 'fe548e6d86d72cd7e90eee9d5396b590ae6e8f8b0dfc661d86c814214e60faea'
 }
 
 # Packages
