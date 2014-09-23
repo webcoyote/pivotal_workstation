@@ -46,19 +46,16 @@ if node["platform"] != "mac_os_x"
   srcfile = "#{Chef::Config[:file_cache_path]}/Sublime-#{Sublime::version(node)}.pkg"
   remote_file srcfile do
     source node['sublime_text'][Sublime::version(node)][node['platform_family']]['url']
-    checksum node['sublime_text'][Sublime::version(node)][node['platform_family']]['checksum']
   end
 
   execute "Unpack Sublime Text" do
     command "tar --strip-components=1 -C '#{Sublime::dstdir(node)}' -xjf '#{srcfile}'"
-    not_if { File.exist?("#{Sublime::dstdir(node)}/sublime_text") }
   end
 
 else
 
   dmg_package "Sublime Text #{Sublime::version(node)}" do
     source node['sublime_text'][Sublime::version(node)]['osx']['url']
-    checksum node['sublime_text'][Sublime::version(node)]['osx']['checksum']
     action :install
     owner WS_USER
   end
