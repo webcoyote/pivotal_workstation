@@ -1,6 +1,17 @@
 #!/bin/bash
-if [[ "$OSTYPE" =~ "darwin" ]]; then
-  open -a /Applications/Sublime\ Text\ <%= node['sublime_text']['version'] %>.app $@
-else
-  /usr/local/bin/subl<%= node['sublime_text']['version'] %> $@  </dev/null >/dev/null 2>&1 &
-fi
+case "$OSTYPE" in
+  darwin*)
+    open -a /Applications/Sublime\ Text\ <%= node['sublime_text']['version'] %>.app "$@" </dev/null >/dev/null 2>&1
+  ;;
+  linux*)
+    exec /usr/local/bin/subl<%= node['sublime_text']['version'] %> "$@" </dev/null >/dev/null 2>&1 &
+  ;;
+  msys*)
+    "/c/Program Files/Sublime Text <%= node['sublime_text']['version'] %>/subl.exe" "$@" </dev/null >/dev/null 2>&1 &
+  ;;
+  *)
+    echo "Unknown OS: $OSTYPE"
+    exit 1
+  ;;
+esac
+
